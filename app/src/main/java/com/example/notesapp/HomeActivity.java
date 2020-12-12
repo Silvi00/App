@@ -13,15 +13,15 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
-    Toolbar toolbar;
+    //Toolbar toolbar;
     RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+       // toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         recyclerView = findViewById(R.id.listOfNotes);
 
     }

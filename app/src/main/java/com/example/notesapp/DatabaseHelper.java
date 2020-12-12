@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -53,19 +54,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
-        if(count>0)
-            return true;
-        else
-            return false;
+        return count > 0;
     }
 
     public int getId(String username,String password)
     {
+        String[] argumentArray = {username, password};
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("select ID from User where username="+username+" and password="+password+"",null);
-        int id= cursor.getInt(0);
+        Cursor cursor = db.rawQuery("select ID from User where username=? and password=?", argumentArray);
+        cursor.moveToFirst();
+        int id= cursor.getInt(cursor.getColumnIndex("ID"));
         cursor.close();
         db.close();
+        Log.d(getClass().getName(),"ID VALUE: " + id);
         return id;
     }
 
