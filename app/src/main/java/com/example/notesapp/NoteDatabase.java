@@ -2,11 +2,15 @@ package com.example.notesapp;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class NoteDatabase extends SQLiteOpenHelper {
+import java.util.ArrayList;
+import java.util.List;
 
+public class NoteDatabase extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "NoteDB";
     private static final String DATABASE_TABLE = "Notes";
@@ -60,5 +64,36 @@ public class NoteDatabase extends SQLiteOpenHelper {
         long ID = db.insert(DATABASE_TABLE,null,c);
         return ID;
 
+    }
+
+    public Note getNote(long id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(DATABASE_TABLE,new String[]{KEY_ID,KEY_TITLE,KEY_CONTENT,KEY_DATE,KEY_TIME,KEY_USERID},KEY_ID + "=?",
+                        new String[]{String.valueOf(id)},null,null,null );
+        if(cursor != null)
+            cursor.moveToFirst();
+
+        return new Note(cursor.getLong(0),cursor.getString(1),
+                cursor.getString(2),cursor.getString(3),cursor.getString(4),cursor.getInt(5));
+    }
+    public List<Note> getNotes(int user_id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<Note> allNotes = new ArrayList<>();
+        String query = "SELECT * FROM " + DATABASE_TABLE + " WHERE userID=?";
+        Cursor cursor = db.rawQuery(query,new String[]{String.valueOf(user_id)});
+        if(cursor.moveToFirst())
+            do {
+                Note note = new Note();
+                note.setID(cursor.getLong(0));
+                note.setTitle(cursor.getString(1));
+                note.setContent(cursor.getString(2));
+                note.setDate(cursor.getString(3));
+                note.setTime(cursor.getString(4));
+                note.setUser_id(cursor.getInt(5));
+
+                allNotes.add(note);
+
+            }while(cursor.moveToNext());
+        return allNotes;
     }
 }

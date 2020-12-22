@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -88,14 +89,20 @@ public class AddNote extends AppCompatActivity {
         if(item.getItemId() == R.id.save)
         {
             String PREFS_SETTINGS = "prefs_settings";
-            SharedPreferences prefUser = getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);;
+            SharedPreferences prefUser = getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
             Note note = new Note(noteTitle.getText().toString(),noteText.getText().toString(),todaysDate,currentTime,prefUser.getInt("ID_USER",0));
             NoteDatabase db = new NoteDatabase(this);
+            Log.i("user","The user id is "+prefUser.getInt("ID_USER",0) );
             db.addNote(note);
             Toast.makeText(this,"Save",Toast.LENGTH_SHORT).show();
-            onBackPressed();
+            goToHome();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void goToHome() {
+        Intent i = new Intent(this,HomeActivity.class);
+        startActivity(i);
     }
 
     @Override
