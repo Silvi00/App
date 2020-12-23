@@ -49,15 +49,15 @@ public class MainActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefUser.edit();
                 String user = mTextUsername.getText().toString().trim();
                 String pwd = mTextPassword.getText().toString().trim();
-                Boolean res = db.checkUser(user, pwd);
-                if( res == true )
+                if( db.checkUser(user, pwd) )
                 {
                     editor.putInt("ID_USER",db.getId(user,pwd));
+                    editor.apply();
                     Intent HomePage = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(HomePage);
                 }
                 else
-                {
+                {   editor.apply();
                     Toast.makeText(MainActivity.this,"Login Error",Toast.LENGTH_SHORT).show();
                 }
             }

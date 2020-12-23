@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
+    private static final String PREFS_SETTINGS = "prefs_settings";
     //Toolbar toolbar;
     RecyclerView recyclerView;
     Adapter adapter;
@@ -30,7 +31,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
        // toolbar = findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
-        String PREFS_SETTINGS = "prefs_settings";
         SharedPreferences prefUser = getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
         NoteDatabase db = new NoteDatabase(this);
         notes = db.getNotes(prefUser.getInt("ID_USER",0));

@@ -24,7 +24,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
     @Override
     public Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = inflater.inflate(R.layout.custom_list_view,viewGroup,false);
-
         return new ViewHolder(view);
     }
 

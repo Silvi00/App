@@ -2,10 +2,10 @@ package com.example.notesapp;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-    public long addNote(Note note){
+    public void addNote(Note note){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues c = new ContentValues();
         c.put(KEY_TITLE,note.getTitle());
@@ -62,7 +62,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
         c.put(KEY_USERID,note.getUser_id());
 
         long ID = db.insert(DATABASE_TABLE,null,c);
-        return ID;
+        Log.i(this.getClass().getName(),"New Note id: " + ID);
 
     }
 

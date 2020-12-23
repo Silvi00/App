@@ -63,7 +63,9 @@ public class AddNote extends AppCompatActivity {
         });
         c = Calendar.getInstance();
         todaysDate = c.get(Calendar.DAY_OF_MONTH)+"/"+(c.get(Calendar.MONTH)+1)+"/"+c.get(Calendar.YEAR);
-        currentTime = pad(c.get(Calendar.HOUR))+":"+pad(c.get(Calendar.MINUTE));
+        currentTime = pad(c.get(Calendar.HOUR_OF_DAY))+":"+pad(c.get(Calendar.MINUTE));
+        Log.i(this.getClass().getName(),"Current time: " + currentTime);
+
     }
 
     private String pad(int i) {
@@ -92,7 +94,7 @@ public class AddNote extends AppCompatActivity {
             SharedPreferences prefUser = getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
             Note note = new Note(noteTitle.getText().toString(),noteText.getText().toString(),todaysDate,currentTime,prefUser.getInt("ID_USER",0));
             NoteDatabase db = new NoteDatabase(this);
-            Log.i("user","The user id is "+prefUser.getInt("ID_USER",0) );
+            Log.i(this.getClass().getName(),"The user id is "+prefUser.getInt("ID_USER",0));
             db.addNote(note);
             Toast.makeText(this,"Save",Toast.LENGTH_SHORT).show();
             goToHome();
