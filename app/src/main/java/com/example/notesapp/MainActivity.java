@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                     editor.apply();
                     Intent HomePage = new Intent(MainActivity.this,HomeActivity.class);
                     startActivity(HomePage);
+
                 }
                 else
                 {   editor.apply();

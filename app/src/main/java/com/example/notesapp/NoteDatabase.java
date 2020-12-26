@@ -90,7 +90,7 @@ public class NoteDatabase extends SQLiteOpenHelper {
                 note.setDate(cursor.getString(3));
                 note.setTime(cursor.getString(4));
                 note.setUser_id(cursor.getInt(5));
-
+                
                 allNotes.add(note);
 
             }while(cursor.moveToNext());

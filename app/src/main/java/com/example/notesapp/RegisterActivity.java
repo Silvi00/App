@@ -54,7 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
                     if(val > 0){
                         Toast.makeText(RegisterActivity.this,"You have registered",Toast.LENGTH_SHORT).show();
                         Intent moveToLogin = new Intent(RegisterActivity.this,MainActivity.class);
-                        startActivity(moveToLogin);}
+                        startActivity(moveToLogin);
+                        finish();
+                    }
                     else{
                         Toast.makeText(RegisterActivity.this,"Registration Error",Toast.LENGTH_SHORT).show();
 
