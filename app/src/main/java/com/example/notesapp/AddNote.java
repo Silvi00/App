@@ -21,7 +21,7 @@ import java.util.Calendar;
 
 public class AddNote extends AppCompatActivity {
 
-    //Toolbar toolbar;
+
     EditText noteTitle;
     EditText noteText;
     Calendar c;
@@ -33,11 +33,8 @@ public class AddNote extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
-     //   toolbar = findViewById(R.id.toolbar);
-       // toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-//        setSupportActionBar(toolbar);
+
         getSupportActionBar().setTitle("New Note");
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         noteTitle = findViewById(R.id.noteTitle);
@@ -86,6 +83,7 @@ public class AddNote extends AppCompatActivity {
         if(item.getItemId() == R.id.delete)
         {
             Toast.makeText(this,"Note Deleted",Toast.LENGTH_SHORT).show();
+            finish();
             onBackPressed();
         }
         if(item.getItemId() == R.id.save)
@@ -95,7 +93,7 @@ public class AddNote extends AppCompatActivity {
             Note note = new Note(noteTitle.getText().toString(),noteText.getText().toString(),todaysDate,currentTime,prefUser.getInt("ID_USER",0));
             NoteDatabase db = new NoteDatabase(this);
             db.addNote(note);
-            Toast.makeText(this,"Save",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Note Saved",Toast.LENGTH_SHORT).show();
             finish();
             goToHome();
         }

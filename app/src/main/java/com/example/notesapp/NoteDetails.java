@@ -54,8 +54,6 @@ public class NoteDetails extends AppCompatActivity {
         noteDetails.setText(note.getContent());
         noteDetails.setMovementMethod(new ScrollingMovementMethod());
 
-        //Toast.makeText(this,"id is: " + note.getTitle(),Toast.LENGTH_SHORT).show();
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,13 +77,10 @@ public class NoteDetails extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.editNote){
-            Toast.makeText(this,"Edit Note",Toast.LENGTH_SHORT).show();
             Intent i = new Intent(this,EditActivity.class);
             i.putExtra("note",note);
             finish();
             startActivity(i);
-
-
         }
 
         return super.onOptionsItemSelected(item);

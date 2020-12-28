@@ -7,24 +7,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> implements Filterable {
 
     LayoutInflater inflater;
     List<Note> notes;
+    List<Note> notesFull;
     ItemClickListener listener;
 
     Adapter(Context context,List<Note> notes,ItemClickListener listener){
         this.inflater = LayoutInflater.from(context);
         this.notes = notes;
         this.listener = listener;
+        notesFull = new ArrayList<>(notes);
+
     }
 
     @NonNull
@@ -66,6 +72,38 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         }
     }
 
+    public Filter getFilter(){
+        return noteFilter;
+    }
 
+    Filter noteFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Note> filteredNotes = new ArrayList<>();
+
+            if(constraint == null || constraint.length() == 0){
+                filteredNotes.addAll(notesFull);
+            }
+            else{
+                String pattern = constraint.toString().toLowerCase().trim();
+
+                for(Note note : notesFull){
+                    if(note.getTitle().toLowerCase().contains(pattern))
+                        filteredNotes.add(note);
+                }
+
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredNotes;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+             notes.clear();
+             notes.addAll((List) results.values);
+             notifyDataSetChanged();
+        }
+    };
 
 }

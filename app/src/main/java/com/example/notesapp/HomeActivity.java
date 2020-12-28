@@ -14,14 +14,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements ItemClickListener{
     private static final String PREFS_SETTINGS = "prefs_settings";
-    //Toolbar toolbar;
+
     RecyclerView recyclerView;
     Adapter adapter;
     List<Note> notes;
@@ -30,8 +32,7 @@ public class HomeActivity extends AppCompatActivity implements ItemClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-       // toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+
         SharedPreferences prefUser = getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
         NoteDatabase db = new NoteDatabase(this);
         notes = db.getNotes(prefUser.getInt("ID_USER",0));
@@ -46,6 +47,23 @@ public class HomeActivity extends AppCompatActivity implements ItemClickListener
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.add_menu,menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -55,9 +73,8 @@ public class HomeActivity extends AppCompatActivity implements ItemClickListener
         {
             Intent i = new Intent(this,AddNote.class);
             startActivity(i);
-
-            Toast.makeText(this,"Add button is Clicked",Toast.LENGTH_SHORT).show();
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -66,6 +83,6 @@ public class HomeActivity extends AppCompatActivity implements ItemClickListener
         Intent i = new Intent(this,NoteDetails.class);
         i.putExtra("note",notes.get(position));
         startActivity(i);
-        //Toast.makeText(this,"note: " + notes.get(position).getTitle(),Toast.LENGTH_SHORT).show();
+
     }
 }

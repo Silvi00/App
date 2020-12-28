@@ -35,7 +35,6 @@ public class EditActivity extends AppCompatActivity {
         Intent i = getIntent();
         note = (Note) i.getSerializableExtra("note");
         db = new NoteDatabase(this);
-        Toast.makeText(this, "note id: " + note.getID(), Toast.LENGTH_SHORT).show();
 
         getSupportActionBar().setTitle(note.getTitle());
         noteTitle = findViewById(R.id.noteTitle);
@@ -87,7 +86,6 @@ public class EditActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.delete) {
             Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-            //i.putExtra("note", note);
             startActivity(i);
             finish();
         }
@@ -103,7 +101,7 @@ public class EditActivity extends AppCompatActivity {
 
                 if (id == 1)
                 {
-                    Toast.makeText(this, "Note; " + note.getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Note Updated", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Update Error", Toast.LENGTH_SHORT).show();
 
