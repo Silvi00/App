@@ -13,12 +13,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements ItemClickListener{
     private static final String PREFS_SETTINGS = "prefs_settings";
     //Toolbar toolbar;
     RecyclerView recyclerView;
@@ -36,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         notes = db.getNotes(prefUser.getInt("ID_USER",0));
         recyclerView = findViewById(R.id.listOfNotes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new Adapter(this,notes);
+        adapter = new Adapter(this,notes,this);
         recyclerView.setAdapter(adapter);
 
     }
@@ -58,5 +59,13 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this,"Add button is Clicked",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        Intent i = new Intent(this,NoteDetails.class);
+        i.putExtra("note",notes.get(position));
+        startActivity(i);
+        //Toast.makeText(this,"note: " + notes.get(position).getTitle(),Toast.LENGTH_SHORT).show();
     }
 }

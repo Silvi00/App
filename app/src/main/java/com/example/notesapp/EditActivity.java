@@ -2,7 +2,6 @@ package com.example.notesapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,29 +18,30 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 
-public class AddNote extends AppCompatActivity {
-
-    //Toolbar toolbar;
+public class EditActivity extends AppCompatActivity {
     EditText noteTitle;
     EditText noteText;
     Calendar c;
     String todaysDate;
     String currentTime;
-
+    Note note;
+    NoteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_note);
-     //   toolbar = findViewById(R.id.toolbar);
-       // toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-//        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("New Note");
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setContentView(R.layout.activity_edit);
 
+        Intent i = getIntent();
+        note = (Note) i.getSerializableExtra("note");
+        db = new NoteDatabase(this);
+        Toast.makeText(this, "note id: " + note.getID(), Toast.LENGTH_SHORT).show();
+
+        getSupportActionBar().setTitle(note.getTitle());
         noteTitle = findViewById(R.id.noteTitle);
         noteText = findViewById(R.id.noteText);
+        noteTitle.setText(note.getTitle());
+        noteText.setText(note.getContent());
 
         noteTitle.addTextChangedListener(new TextWatcher() {
             @Override
@@ -51,10 +51,10 @@ public class AddNote extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                  if(s.length() != 0)
-                  {
-                      getSupportActionBar().setTitle(s);
-                  }
+                if(s.length() != 0)
+                {
+                    getSupportActionBar().setTitle(s);
+                }
             }
 
             @Override
@@ -74,6 +74,7 @@ public class AddNote extends AppCompatActivity {
         return String.valueOf(i);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -83,32 +84,45 @@ public class AddNote extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.delete)
-        {
-            Toast.makeText(this,"Note Deleted",Toast.LENGTH_SHORT).show();
-            onBackPressed();
-        }
-        if(item.getItemId() == R.id.save)
-        {
-            String PREFS_SETTINGS = "prefs_settings";
-            SharedPreferences prefUser = getSharedPreferences(PREFS_SETTINGS, Context.MODE_PRIVATE);
-            Note note = new Note(noteTitle.getText().toString(),noteText.getText().toString(),todaysDate,currentTime,prefUser.getInt("ID_USER",0));
-            NoteDatabase db = new NoteDatabase(this);
-            db.addNote(note);
-            Toast.makeText(this,"Save",Toast.LENGTH_SHORT).show();
+        if (item.getItemId() == R.id.delete) {
+            Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getApplicationContext(), HomeActivity.class);
+            //i.putExtra("note", note);
+            startActivity(i);
             finish();
-            goToHome();
         }
-        return super.onOptionsItemSelected(item);
-    }
+        if (item.getItemId() == R.id.save) {
+            if (noteTitle.getText().length() != 0) {
 
-    private void goToHome() {
-        Intent i = new Intent(this,HomeActivity.class);
-        startActivity(i);
+                note.setTitle(noteTitle.getText().toString());
+                note.setContent(noteText.getText().toString());
+                note.setTime(currentTime);
+                note.setDate(todaysDate);
+
+                int id = db.editNote(note);
+
+                if (id == 1)
+                {
+                    Toast.makeText(this, "Note; " + note.getTitle(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Update Error", Toast.LENGTH_SHORT).show();
+
+                }
+                Intent i = new Intent(getApplicationContext(), NoteDetails.class);
+                i.putExtra("note", note);
+                finish();
+                startActivity(i);
+
+
+            } else noteTitle.setError("Title can't be blank.");
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
+
 }

@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NotesApp">
+        <activity android:name=".EditActivity"></activity>
         <activity
             android:name=".NoteDetails"
             android:label="@string/title_activity_note_details"
-            android:theme="@style/Theme.NotesApp.NoActionBar"></activity>
+            android:theme="@style/Theme.NotesApp.NoActionBar" />
         <activity android:name=".AddNote">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

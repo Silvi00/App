@@ -19,10 +19,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
 
     LayoutInflater inflater;
     List<Note> notes;
+    ItemClickListener listener;
 
-    Adapter(Context context,List<Note> notes){
+    Adapter(Context context,List<Note> notes,ItemClickListener listener){
         this.inflater = LayoutInflater.from(context);
         this.notes = notes;
+        this.listener = listener;
     }
 
     @NonNull
@@ -34,13 +36,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull Adapter.ViewHolder viewHolder, int position) {
-
-        String title = notes.get(position).getTitle();
-        String date = notes.get(position).getDate();
-        String time = notes.get(position).getTime();
-        viewHolder.nTitle.setText(title);
-        viewHolder.nDate.setText(date);
-        viewHolder.nTime.setText(time);
+        viewHolder.bind(position, listener);
     }
 
     @Override
@@ -57,18 +53,16 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
             nTitle = itemView.findViewById(R.id.nTitle);
             nDate = itemView.findViewById(R.id.nDate);
             nTime = itemView.findViewById(R.id.nTime);
+        }
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAbsoluteAdapterPosition();
-                    Intent i = new Intent(v.getContext(),NoteDetails.class);
-                   // i.putExtra("ID",notes.get(position).getID());
-                   Toast.makeText(v.getContext(),"note id: "+ notes.get(position).getID(),Toast.LENGTH_SHORT).show();
-                   // v.getContext().startActivity(i);
-                }
-            });
-
+        public void bind(int position,ItemClickListener listener){
+            String title = notes.get(position).getTitle();
+            String date = notes.get(position).getDate();
+            String time = notes.get(position).getTime();
+            this.nTitle.setText(title);
+            this.nDate.setText(date);
+            this.nTime.setText(time);
+            itemView.setOnClickListener(v -> listener.onClick(v,position));
         }
     }
 

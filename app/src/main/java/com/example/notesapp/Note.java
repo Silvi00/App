@@ -1,7 +1,9 @@
 package com.example.notesapp;
 
-public class Note {
-    private long ID;
+import java.io.Serializable;
+
+public class Note implements Serializable {
+    private int ID;
     private String title;
     private String content;
     private String date;
@@ -18,7 +20,7 @@ public class Note {
         this.user_id = user_id;
     }
 
-    Note(long id, String title, String content, String date, String time,int user_id){
+    Note(int id, String title, String content, String date, String time,int user_id){
         this.ID = id;
         this.title = title;
         this.content = content;
@@ -27,11 +29,11 @@ public class Note {
         this.user_id = user_id;
     }
 
-    public long getID() {
+    public int getID() {
         return ID;
     }
 
-    public void setID(long ID) {
+    public void setID(int ID) {
         this.ID = ID;
     }
 
